@@ -4,7 +4,11 @@ import Meals from '../components/Meals';
 import Meal from '../components/Meal';
 
 const CalorieCounter = (props) => {
-  const [meals, setMeals] = useState([]);
+  const [meals, setMeals] = useState([
+    {id: 1, description: 'Breakfast', calories: 100},
+    {id: 2, description: 'Lunch', calories: 2},
+    {id: 3, description: 'Dinner', calories: 2000},
+  ]);
   const [prefillMeal, setPrefillMeal] = useState({ ...MEAL });
 
   const addMealHandler = useCallback((meal) => setMeals(addMeal(meal)), []);
