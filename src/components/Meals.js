@@ -3,9 +3,6 @@ import { isEmpty, reduce, add, map, prop } from 'ramda';
 
 const Meals = ({ meals, editMeal, removeMeal }) => {
 
-  // console.log(`Re-render Meals`);
-
-
   if (isEmpty(meals)) {
     return <ZeroMeals />
   }
@@ -49,8 +46,6 @@ const ZeroMeals = () => {
   );
 };
 
-export const totalCalories = (meals) => {
-  return reduce(add, 0, map(prop('calories'), meals));
-};
+export const totalCalories = (meals) => reduce(add, 0, map(prop('calories'), meals));
 
 export default Meals;

@@ -5,8 +5,6 @@ const Meal = ({ addMeal, cancelEditMeal, updateMeal, prefillMeal }) => {
   const [description, setDescription] = useState('');
   const [calories, setCalories] = useState('');
 
-  // console.log(`Re-render Meal`);
-
   useEffect(() => {
     if (prefillMeal.id) {
       setEditingMeal(true);
