@@ -3,11 +3,11 @@ import { filter, find, findIndex, append, update, curry, complement } from 'ramd
 import Meals from '../components/Meals';
 import Meal from '../components/Meal';
 
-const CalorieCounter = (props) => {
+const CalorieCounter = () => {
   const [meals, setMeals] = useState([
-    {id: 1, description: 'Breakfast', calories: 100},
-    {id: 2, description: 'Lunch', calories: 2},
-    {id: 3, description: 'Dinner', calories: 2000},
+    { id: 1, description: 'Breakfast', calories: 100 },
+    { id: 2, description: 'Lunch', calories: 2 },
+    { id: 3, description: 'Dinner', calories: 2000 },
   ]);
   const [prefillMeal, setPrefillMeal] = useState({ ...MEAL });
 
@@ -22,17 +22,23 @@ const CalorieCounter = (props) => {
   const cancelEditMealHandler = useCallback(() => setPrefillMeal({ ...MEAL }), []);
 
   return (
-    <div>
-      <div>Calorie Counter</div>
-      <Meal 
-        addMeal={addMealHandler} 
-        prefillMeal={prefillMeal} 
-        cancelEditMeal={cancelEditMealHandler} 
-        updateMeal={updateMealHandler} />
-      <Meals 
-        meals={meals} 
-        removeMeal={removeMealHandler} 
-        editMeal={editMealHandler} />
+    <div className='mw8 center ph3-ns'>
+      <h1 className='f2 lh-copy'>Calorie Counter</h1>
+      <div>
+        <div className='fl w-third pa2'>
+          <Meal
+            addMeal={addMealHandler}
+            prefillMeal={prefillMeal}
+            cancelEditMeal={cancelEditMealHandler}
+            updateMeal={updateMealHandler} />
+        </div>
+        <div className='fl w-two-thirds pa2'>
+          <Meals
+            meals={meals}
+            removeMeal={removeMealHandler}
+            editMeal={editMealHandler} />
+        </div>
+      </div>
     </div>
   );
 };

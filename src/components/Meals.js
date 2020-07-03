@@ -8,7 +8,7 @@ const Meals = ({ meals, editMeal, removeMeal }) => {
   }
 
   return (
-    <table className='collapse f6 w-50 mw8 center'>
+    <table className='collapse f6 w-100 mw8 center'>
       <thead className='ttu'>
         <tr className='striped--near-white'>
           <th className='fw6 tl pa3 bg-white'>Meal</th>
@@ -47,9 +47,7 @@ const Meal = ({ meal, editMeal, removeMeal }) => {
 
 const ZeroMeals = () => {
   return (
-    <div>
-      No meals, add one!
-    </div>
+    <h1 className='f4'>No meals, add one!</h1>
   );
 };
 
