@@ -22,17 +22,17 @@ const CalorieCounter = () => {
   const cancelEditMealHandler = useCallback(() => setPrefillMeal({ ...MEAL }), []);
 
   return (
-    <div className='mw8 center ph3-ns'>
-      <h1 className='f2 lh-copy'>Calorie Counter</h1>
+    <div>
+      <h1>Calorie Counter</h1>
       <div>
-        <div className='fl w-third pa2'>
+        <div>
           <Meal
             addMeal={addMealHandler}
             prefillMeal={prefillMeal}
             cancelEditMeal={cancelEditMealHandler}
             updateMeal={updateMealHandler} />
         </div>
-        <div className='fl w-two-thirds pa2'>
+        <div>
           <Meals
             meals={meals}
             removeMeal={removeMealHandler}
