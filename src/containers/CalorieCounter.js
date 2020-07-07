@@ -40,11 +40,20 @@ const CalorieCounter = ({ initialMeals, initialEditMeal }) => {
   }, [resetEditMeal]);
 
   return (
-    <div>
-      <h3>Calorie Counter</h3>
-      <hr />
-      <MealEntry onSaveMeal={saveMealHandler} onCancelMealEntry={cancelMealEntryHandler} meal={editMeal} />
-      <MealList meals={meals} onEditMeal={editMealHandler} onDeleteMeal={deleteMealHandler} />
+    <div className="container">
+      <div className="row justify-content-center border-bottom">
+        <div className="col-2">
+          <h3 class="display-4">Meals</h3>
+        </div>
+      </div>
+      <div className="row p-3">
+        <div className="col-4">
+          <MealEntry onSaveMeal={saveMealHandler} onCancelMealEntry={cancelMealEntryHandler} meal={editMeal} />
+        </div>
+        <div className="col-8 ">
+          <MealList meals={meals} onEditMeal={editMealHandler} onDeleteMeal={deleteMealHandler} />
+        </div>
+      </div>
     </div>
   );
 };

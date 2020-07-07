@@ -27,7 +27,7 @@ const MealEntry = ({ onSaveMeal, onCancelMealEntry, meal }) => {
 };
 
 const NoAction = ({ onAddMeal }) => (
-  <button onClick={onAddMeal}>Add Meal</button>
+  <button onClick={onAddMeal} className="btn btn-primary">Add Meal</button>
 );
 
 const FormEntry = ({ onSaveMeal, onCancelMeal, meal }) => {
@@ -50,20 +50,22 @@ const FormEntry = ({ onSaveMeal, onCancelMeal, meal }) => {
   }, [meal, description, calories, onSaveMeal]);
 
   return (
-    <form onSubmit={submitHandler}>
-      <div>
-        <label htmlFor="description">Description:</label>
-        <input type="text" id="description" value={description} onChange={e => setDescription(e.target.value)} />
-      </div>
-      <div>
-        <label htmlFor="calories">Calories:</label>
-        <input type="number" id="calories" value={calories || ''} onChange={e => setCalories(e.target.value)} />
-      </div>
-      <div>
-        <button type="submit">Save</button>
-        <button type="button" onClick={onCancelMeal}>Cancel</button>
-      </div>
-    </form>);
+    <div className="container">
+      <form onSubmit={submitHandler}>
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <input type="text" className="form-control" id="description" aria-describedby="descriptionHelp" value={description} onChange={e => setDescription(e.target.value)} />
+          <small id="descriptionHelp" className="form-text text-muted">Describe the meal, snack, or whatever it may be.</small>
+        </div>
+        <div className="form-group">
+          <label htmlFor="calories">Calories</label>
+          <input type="number" className="form-control" id="calories" value={calories || ''} onChange={e => setCalories(e.target.value)} />
+        </div>
+        <button type="submit" className="btn btn-primary mr-3">Save</button>
+        <button type="button" className="btn btn-secondary" onClick={onCancelMeal}>Cancel</button>
+      </form>
+    </div>
+  );
 };
 
 export const DEFAULT_MEAL = {

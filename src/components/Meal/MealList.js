@@ -25,31 +25,32 @@ const ZeroMeals = () => (
 );
 
 const ShowMealItems = (onEditMeal, onDeleteMeal, meals) => (
-  <table>
-    <thead>
-      <tr>
-        <th>Meal</th>
-        <th>Calories</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {toMealItems(onEditMeal, onDeleteMeal)(meals)}
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>Total:</td>
-        <td>{totalCalories(meals)}</td>
-      </tr>
-    </tfoot>
-  </table>
+  <div className="table-responsive">
+    <table className="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Meal</th>
+          <th scope="col">Calories</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {toMealItems(onEditMeal, onDeleteMeal)(meals)}
+        <tr>
+          <th scope="col">Total:</th>
+          <td>{totalCalories(meals)}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 );
 
 const MealItem = (onEditMeal, onDeleteMeal, meal) => (
   <tr key={meal.id}>
     <td>{meal.description}</td>
     <td>{localizedNumber(meal.calories)}</td>
-    <td><button onClick={() => onEditMeal(meal.id)}>Edit</button> | <button onClick={() => onDeleteMeal(meal.id)}>Delete</button></td>
+    <td><button onClick={() => onEditMeal(meal.id)} className="btn btn-link">Edit</button> <button onClick={() => onDeleteMeal(meal.id)} className="btn btn-link">Delete</button></td>
   </tr>
 );
 
