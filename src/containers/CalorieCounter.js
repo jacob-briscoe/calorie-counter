@@ -4,35 +4,39 @@ import MealEntry, { DEFAULT_MEAL } from '../components/Meal/MealEntry';
 import MealList from '../components/Meal/MealList';
 import { randomInt } from '../helpers/math';
 
-const CalorieCounter = ({ initialMeals }) => {
+const CalorieCounter = ({ initialMeals, initialEditMeal }) => {
   const [meals, setMeals] = useState([...initialMeals]);
-  const [editMeal, setEditMeal] = useState({ ...DEFAULT_MEAL });
+  const [editMeal, setEditMeal] = useState({ ...initialEditMeal });
+
+  const resetEditMeal = useCallback(() => setEditMeal({ ...DEFAULT_MEAL }), []);
 
   const saveMealHandler = useCallback((meal) => {
     R.pipe(
       addOrUpdate(meal),
       setMeals
     )(meals);
-    setEditMeal({ ...DEFAULT_MEAL });
-  }, [meals]);
+
+    resetEditMeal();
+
+  }, [resetEditMeal, meals]);
 
   const editMealHandler = useCallback((id) => {
     R.pipe(
-      R.find(R.propEq('id', id)),
+      findMeal(id),
       setEditMeal
     )(meals);
   }, [meals]);
 
   const deleteMealHandler = useCallback((id) => {
     R.pipe(
-      R.remove(findMeal({ id }), 1),
+      R.remove(findMealIndex(id), 1),
       setMeals
     )(meals);
   }, [meals]);
 
   const cancelMealEntryHandler = useCallback(() => {
-    setEditMeal({ ...DEFAULT_MEAL });
-  }, []);
+    resetEditMeal();
+  }, [resetEditMeal]);
 
   return (
     <div>
@@ -45,7 +49,8 @@ const CalorieCounter = ({ initialMeals }) => {
 };
 
 CalorieCounter.defaultProps = {
-  initialMeals: []
+  initialMeals: [],
+  initialEditMeal: DEFAULT_MEAL
 };
 
 const addOrUpdate = R.curry((meal, ms) =>
@@ -60,13 +65,16 @@ const addMeal = (meal, meals) =>
     id: randomInt(500)
   }, meals);
 
-const updateMeal = (meal, meals) => {
-  const mealIndex = findMeal(meal)(meals);
-  const copyMeal = () => ({ ...meal });
+const updateMeal = (meal, meals) =>
+  R.adjust(
+    findMealIndex(meal.id)(meals),
+    R.always({ ...meal }),
+    meals);
 
-  return R.adjust(mealIndex, copyMeal, meals);
-};
+const byMealId = R.propEq('id');
 
-const findMeal = (meal) => R.findIndex(R.propEq('id', meal.id));
+const findMeal = (id) => R.find(byMealId(id));
+
+const findMealIndex = (id) => R.findIndex(byMealId(id));
 
 export default CalorieCounter;
