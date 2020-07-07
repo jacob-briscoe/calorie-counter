@@ -2,8 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import * as R from 'ramda';
 import { notEqual } from '../../helpers/logic';
 
-const MealEntry = ({ onSaveMeal, onCancelMealEntry, meal, showForm }) => {
-  const [displayFormEntry, setDisplayFormEntry] = useState(showForm);
+const MealEntry = ({ onSaveMeal, onCancelMealEntry, meal }) => {
+  const [displayFormEntry, setDisplayFormEntry] = useState(false);
 
   useEffect(() =>
     R.ifElse(notEqual(DEFAULT_MEAL),
@@ -72,8 +72,7 @@ export const DEFAULT_MEAL = {
 };
 
 MealEntry.defaultProps = {
-  meal: { ...DEFAULT_MEAL },
-  showForm: false
+  meal: { ...DEFAULT_MEAL }
 };
 
 export default MealEntry;
