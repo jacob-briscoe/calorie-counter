@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import { notEqual } from '../../helpers/logic';
 
@@ -69,6 +70,16 @@ export const DEFAULT_MEAL = {
   id: null,
   description: '',
   calories: 0
+};
+
+export const MEAL_SHAPE = PropTypes.shape({
+  id: PropTypes.number,
+  description: PropTypes.string,
+  calories: PropTypes.number
+});
+
+MealEntry.propTypes = {
+  meal: MEAL_SHAPE
 };
 
 MealEntry.defaultProps = {

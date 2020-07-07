@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import { localizedNumber } from '../../helpers/format';
 
@@ -6,8 +7,18 @@ const MealList = ({ meals, onEditMeal, onDeleteMeal }) => (
   R.ifElse(R.isEmpty,
     R.always(ZeroMeals()),
     R.partial(ShowMealItems, [onEditMeal, onDeleteMeal]))
-  (meals)
+    (meals)
 );
+
+MealList.propTypes = {
+  meals: PropTypes.array,
+  onEditMeal: PropTypes.func.isRequired,
+  onDeleteMeal: PropTypes.func.isRequired
+};
+
+MealList.defaultProps = {
+  meals: []
+};
 
 const ZeroMeals = () => (
   <h3>No meals yet, add one!</h3>

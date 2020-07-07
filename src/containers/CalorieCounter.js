@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import MealEntry, { DEFAULT_MEAL } from '../components/Meal/MealEntry';
+import MealEntry, { DEFAULT_MEAL, MEAL_SHAPE } from '../components/Meal/MealEntry';
 import MealList from '../components/Meal/MealList';
 import { randomInt } from '../helpers/math';
 
@@ -46,6 +47,11 @@ const CalorieCounter = ({ initialMeals, initialEditMeal }) => {
       <MealList meals={meals} onEditMeal={editMealHandler} onDeleteMeal={deleteMealHandler} />
     </div>
   );
+};
+
+CalorieCounter.propTypes = {
+  initialMeals: PropTypes.array,
+  initialEditMeal: MEAL_SHAPE
 };
 
 CalorieCounter.defaultProps = {
