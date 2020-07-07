@@ -1,62 +1,72 @@
 import React, { useState, useCallback } from 'react';
-import { filter, find, findIndex, append, update, curry, complement } from 'ramda';
-import Meals from '../components/Meals';
-import Meal from '../components/Meal';
+import * as R from 'ramda';
+import MealEntry, { DEFAULT_MEAL } from '../components/Meal/MealEntry';
+import MealList from '../components/Meal/MealList';
+import { randomInt } from '../helpers/math';
 
-const CalorieCounter = () => {
-  const [meals, setMeals] = useState([
-    { id: 1, description: 'Breakfast', calories: 100 },
-    { id: 2, description: 'Lunch', calories: 2 },
-    { id: 3, description: 'Dinner', calories: 2000 },
-  ]);
-  const [prefillMeal, setPrefillMeal] = useState({ ...MEAL });
+const CalorieCounter = ({ initialMeals }) => {
+  const [meals, setMeals] = useState([...initialMeals]);
+  const [editMeal, setEditMeal] = useState({ ...DEFAULT_MEAL });
 
-  const addMealHandler = useCallback((meal) => setMeals(addMeal(meal)), []);
+  const saveMealHandler = useCallback((meal) => {
+    R.pipe(
+      addOrUpdate(meal),
+      setMeals
+    )(meals);
+    setEditMeal({ ...DEFAULT_MEAL });
+  }, [meals]);
 
-  const removeMealHandler = useCallback((id) => setMeals(removeMeal(id)), []);
+  const editMealHandler = useCallback((id) => {
+    R.pipe(
+      R.find(R.propEq('id', id)),
+      setEditMeal
+    )(meals);
+  }, [meals]);
 
-  const editMealHandler = useCallback((id) => setPrefillMeal(getMeal(id, meals)), [meals]);
+  const deleteMealHandler = useCallback((id) => {
+    R.pipe(
+      R.remove(findMeal({ id }), 1),
+      setMeals
+    )(meals);
+  }, [meals]);
 
-  const updateMealHandler = useCallback((meal) => setMeals(updateMeal(meal)), []);
-
-  const cancelEditMealHandler = useCallback(() => setPrefillMeal({ ...MEAL }), []);
+  const cancelMealEntryHandler = useCallback(() => {
+    setEditMeal({ ...DEFAULT_MEAL });
+  }, []);
 
   return (
     <div>
-      <h1>Calorie Counter</h1>
-      <div>
-        <div>
-          <Meal
-            addMeal={addMealHandler}
-            prefillMeal={prefillMeal}
-            cancelEditMeal={cancelEditMealHandler}
-            updateMeal={updateMealHandler} />
-        </div>
-        <div>
-          <Meals
-            meals={meals}
-            removeMeal={removeMealHandler}
-            editMeal={editMealHandler} />
-        </div>
-      </div>
+      <h3>Calorie Counter</h3>
+      <hr />
+      <MealEntry onSaveMeal={saveMealHandler} onCancelMealEntry={cancelMealEntryHandler} meal={editMeal} />
+      <MealList meals={meals} onEditMeal={editMealHandler} onDeleteMeal={deleteMealHandler} />
     </div>
   );
 };
 
-export const isSameMeal = curry((id, meal) => meal.id === id);
+CalorieCounter.defaultProps = {
+  initialMeals: []
+};
 
-export const notSameMeal = complement(isSameMeal);
+const addOrUpdate = R.curry((meal, ms) =>
+  R.ifElse(R.isNil,
+    () => addMeal(meal, ms),
+    () => updateMeal(meal, ms))
+    (meal.id));
 
-export const findMeal = (id, meals) => findIndex(isSameMeal(id), meals);
+const addMeal = (meal, meals) =>
+  R.append({
+    ...meal,
+    id: randomInt(500)
+  }, meals);
 
-export const getMeal = curry((id, meals) => find(isSameMeal(id), meals));
+const updateMeal = (meal, meals) => {
+  const mealIndex = findMeal(meal)(meals);
+  const copyMeal = () => ({ ...meal });
 
-export const addMeal = curry((meal, meals) => append(meal, meals));
+  return R.adjust(mealIndex, copyMeal, meals);
+};
 
-export const removeMeal = curry((id, meals) => filter(notSameMeal(id), meals));
-
-export const updateMeal = curry((meal, meals) => update(findMeal(meal.id, meals), meal)(meals));
-
-const MEAL = { description: '', calories: '' };
+const findMeal = (meal) => R.findIndex(R.propEq('id', meal.id));
 
 export default CalorieCounter;

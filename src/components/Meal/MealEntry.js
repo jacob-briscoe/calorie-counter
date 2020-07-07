@@ -1,60 +1,79 @@
-import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import React, { useState, useCallback, useEffect } from 'react';
+import * as R from 'ramda';
+import { notEqual } from '../../helpers/logic';
 
-const MealEntry = ({ meal, onSaveMeal, onCancelMeal }) => {
-  const id = meal.id;
-  const [description, setDescription] = useState(meal.description);
-  const [calories, setCalories] = useState(meal.calories);
+const MealEntry = ({ onSaveMeal, onCancelMealEntry, meal, showForm }) => {
+  const [displayFormEntry, setDisplayFormEntry] = useState(showForm);
 
-  const currentMeal = useCallback(() => ({ id, description, calories }), [id, description, calories]);
+  useEffect(() =>
+    R.ifElse(notEqual(DEFAULT_MEAL),
+      () => setDisplayFormEntry(true),
+      () => setDisplayFormEntry(false))
+      (meal)
+    , [meal]);
 
-  return (
-    <Grid
-      container
-      direction="column"
-      spacing={3}>
-      <Grid item xs={6}>
-        <TextField id="description" value={description} onChange={e => setDescription(e.target.value)} label="Description" variant="outlined" fullWidth />
-      </Grid>
-      <Grid item xs={3}>
-        <TextField id="calories" value={calories} onChange={e => setCalories(e.target.value)} label="Calories" variant="outlined" type="number" fullWidth />
-      </Grid>
-      <Grid item xs={6} align="right">
-        <Button color="secondary" onClick={onCancelMeal} style={{ marginRight: '10px' }}>Cancel</Button>
-        <Button color="primary" onClick={() => saveMealHandler(currentMeal(), onSaveMeal)}>Save</Button>
-      </Grid>
-    </Grid>
-  );
+  const toggleFormHandler = useCallback(() => setDisplayFormEntry(prev => R.not(prev)), []);
+
+  const onSaveMealHandler = useCallback((e) => {
+    toggleFormHandler();
+    onSaveMeal(e);
+  }, [toggleFormHandler, onSaveMeal]);
+
+  return R.ifElse(
+    R.equals(true),
+    R.always(<FormEntry onSaveMeal={onSaveMealHandler} onCancelMeal={onCancelMealEntry} meal={meal} />),
+    R.always(<NoAction onAddMeal={toggleFormHandler} />))(displayFormEntry);
 };
 
-const saveMealHandler = (meal, delegateTo) => {
-  delegateTo({
-    meal: {
+const NoAction = ({ onAddMeal }) => (
+  <button onClick={onAddMeal}>Add Meal</button>
+);
+
+const FormEntry = ({ onSaveMeal, onCancelMeal, meal }) => {
+  const [description, setDescription] = useState(meal && meal.description);
+  const [calories, setCalories] = useState(meal && meal.calories);
+
+  const submitHandler = useCallback((event) => {
+    event.preventDefault();
+
+    const caloriesToInt = R.pipe(
+      parseInt,
+      R.defaultTo(0)
+    )(calories);
+
+    onSaveMeal({
       ...meal,
-      calories: parseInt(meal.calories)
-    },
-  });
+      description,
+      calories: caloriesToInt
+    });
+  }, [meal, description, calories, onSaveMeal]);
+
+  return (
+    <form onSubmit={submitHandler}>
+      <div>
+        <label htmlFor="description">Description:</label>
+        <input type="text" id="description" value={description} onChange={e => setDescription(e.target.value)} />
+      </div>
+      <div>
+        <label htmlFor="calories">Calories:</label>
+        <input type="number" id="calories" value={calories || ''} onChange={e => setCalories(e.target.value)} />
+      </div>
+      <div>
+        <button type="submit">Save</button>
+        <button type="button" onClick={onCancelMeal}>Cancel</button>
+      </div>
+    </form>);
+};
+
+export const DEFAULT_MEAL = {
+  id: null,
+  description: '',
+  calories: 0
 };
 
 MealEntry.defaultProps = {
-  meal: {
-    id: null,
-    description: '',
-    calories: ''
-  }
-};
-
-MealEntry.propTypes = {
-  meal: PropTypes.shape({
-    id: PropTypes.number,
-    description: PropTypes.string,
-    calories: PropTypes.string
-  }),
-  onSaveMeal: PropTypes.func.isRequired,
-  onCancelMeal: PropTypes.func.isRequired
+  meal: { ...DEFAULT_MEAL },
+  showForm: false
 };
 
 export default MealEntry;

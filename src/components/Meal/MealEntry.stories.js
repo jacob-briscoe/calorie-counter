@@ -9,8 +9,8 @@ export default {
 };
 
 export const actionsData = {
-  onSaveMeal: action('onSaveMeal'),
-  onCancelMeal: action('onCancelMeal')
+  onSaveMeal: action('onSaveMeal')
+  // onCancelMeal: action('onCancelMeal')
 };
 
 export const mealData = {
@@ -19,7 +19,10 @@ export const mealData = {
   calories: '1000'
 };
 
-export const New = () => <MealEntry {...actionsData} />;
 
-export const Update = () => <MealEntry meal={{...mealData}} {...actionsData} />;
 
+export const NoAction = () => <MealEntry />
+
+export const Add = () => <MealEntry {...actionsData} mealEntryView />;
+
+export const Editing = () => <MealEntry mealEntryView {...actionsData} meal={{...mealData}} />;

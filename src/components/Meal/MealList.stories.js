@@ -1,4 +1,5 @@
 import React from 'react';
+import { action } from '@storybook/addon-actions';
 import MealList from './MealList';
 
 export default {
@@ -7,25 +8,18 @@ export default {
   excludeStories: /.*Data$/
 };
 
-export const mealListData = [
-  {
-    id: 1,
-    description: 'Breakfast',
-    calories: 1000
-  },
-  {
-    id: 2,
-    description: 'Lunch',
-    calories: 2000
-  },
-  {
-    id: 3,
-    description: 'Dinner',
-    calories: 3000
-  },
+export const actionsData = {
+  onEditMeal: action('onEditMeal'),
+  onCancelMeal: action('onCancelMeal'),
+  onDeleteMeal: action('onDeleteMeal')
+};
+
+export const mealData = [
+  { id: 1, description: 'Breakfast', calories: 400 },
+  { id: 2, description: 'Lunch', calories: 1400 },
+  { id: 3, description: 'Dinner', calories: 2030 },
 ];
 
-export const None = () => <MealList meals={[]} />;
+export const Empty = () => <MealList {...actionsData} meals={[]} />;
 
-export const Multiple = () => <MealList meals={mealListData} />;
-
+export const Entries = () => <MealList {...actionsData} meals={mealData} />;
