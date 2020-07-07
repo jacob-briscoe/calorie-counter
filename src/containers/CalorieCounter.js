@@ -47,10 +47,10 @@ const CalorieCounter = ({ initialMeals, initialEditMeal }) => {
         </div>
       </div>
       <div className="row p-3">
-        <div className="col-4">
+        <div className="col-sm-4">
           <MealEntry onSaveMeal={saveMealHandler} onCancelMealEntry={cancelMealEntryHandler} meal={editMeal} />
         </div>
-        <div className="col-8 ">
+        <div className="col-sm-8">
           <MealList meals={meals} onEditMeal={editMealHandler} onDeleteMeal={deleteMealHandler} />
         </div>
       </div>
