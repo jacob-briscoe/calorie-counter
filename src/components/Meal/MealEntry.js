@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import { notEqual } from '../../helpers/logic';
+import { notEqual, stringIsNotBlank } from '../../helpers/logic';
+import { stringToInt } from '../../helpers/format';
 
 const MealEntry = ({ onSaveMeal, onCancelMealEntry, meal }) => {
   const [displayFormEntry, setDisplayFormEntry] = useState(false);
@@ -37,17 +38,14 @@ const FormEntry = ({ onSaveMeal, onCancelMeal, meal }) => {
   const submitHandler = useCallback((event) => {
     event.preventDefault();
 
-    const caloriesToInt = R.pipe(
-      parseInt,
-      R.defaultTo(0)
-    )(calories);
-
     onSaveMeal({
       ...meal,
       description,
-      calories: caloriesToInt
+      calories: stringToInt(calories)
     });
   }, [meal, description, calories, onSaveMeal]);
+
+  const isValid = useCallback(() => R.and(stringIsNotBlank(description), R.gt(stringToInt(calories), 0)), [description, calories]);
 
   return (
     <div className="container">
@@ -61,7 +59,7 @@ const FormEntry = ({ onSaveMeal, onCancelMeal, meal }) => {
           <label htmlFor="calories">Calories</label>
           <input type="number" className="form-control" id="calories" value={calories || ''} onChange={e => setCalories(e.target.value)} />
         </div>
-        <button type="submit" className="btn btn-primary mr-3">Save</button>
+        <button type="submit" className="btn btn-primary mr-3" disabled={R.not(isValid())}>Save</button>
         <button type="button" className="btn btn-secondary" onClick={onCancelMeal}>Cancel</button>
       </form>
     </div>
