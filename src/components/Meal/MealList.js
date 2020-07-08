@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import { localizedNumber } from '../../helpers/format';
+import { numberToLocalizedString } from '../../helpers/format';
 
 const MealList = ({ meals, onEditMeal, onDeleteMeal }) => (
   R.ifElse(R.isEmpty,
@@ -49,7 +49,7 @@ const ShowMealItems = (onEditMeal, onDeleteMeal, meals) => (
 const MealItem = (onEditMeal, onDeleteMeal, meal) => (
   <tr key={meal.id}>
     <td>{meal.description}</td>
-    <td>{localizedNumber(meal.calories)}</td>
+    <td>{numberToLocalizedString(meal.calories)}</td>
     <td><button onClick={() => onEditMeal(meal.id)} className="btn btn-link">Edit</button> <button onClick={() => onDeleteMeal(meal.id)} className="btn btn-link">Delete</button></td>
   </tr>
 );
@@ -57,7 +57,7 @@ const MealItem = (onEditMeal, onDeleteMeal, meal) => (
 const totalCalories = R.pipe(
   R.map(R.prop('calories')),
   R.sum,
-  localizedNumber
+  numberToLocalizedString
 );
 
 const toMealItems = (onEditMeal, onDeleteMeal) => R.map(R.partial(MealItem, [onEditMeal, onDeleteMeal]));

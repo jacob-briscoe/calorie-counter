@@ -1,8 +1,15 @@
 import * as R from 'ramda';
 
-export const localizedNumber = (num) => num.toLocaleString();
+export const DEFAULT_LOCALE = 'en-US';
 
-export const stringToInt = (stringNum) => R.pipe(
+const DEFAULT_TO_ZERO = R.defaultTo(0);
+
+export const numberToLocalizedString = R.pipe(
+  DEFAULT_TO_ZERO,
+  R.call(R.always(new Intl.NumberFormat(DEFAULT_LOCALE).format))
+);
+
+export const stringToInt = R.pipe(
   parseInt,
-  R.defaultTo(0)
-)(stringNum);
+  DEFAULT_TO_ZERO
+);

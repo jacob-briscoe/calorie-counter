@@ -1,54 +1,51 @@
-import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useCallback, useEffect } from 'react';
 import * as R from 'ramda';
 import MealEntry, { DEFAULT_MEAL, MEAL_SHAPE } from '../components/Meal/MealEntry';
 import MealList from '../components/Meal/MealList';
-import { randomInt } from '../helpers/math';
+import * as MealsRepository from '../repositories/meals/mealsRepository';
 
-const CalorieCounter = ({ initialMeals, initialEditMeal }) => {
-  const [meals, setMeals] = useState([...initialMeals]);
+const CalorieCounter = ({ initialEditMeal }) => {
+  const [meals, setMeals] = useState();
+
+  useEffect(
+    R.pipe(
+      MealsRepository.allMeals,
+      setMeals
+    ), []);
+
   const [editMeal, setEditMeal] = useState({ ...initialEditMeal });
 
-  const resetEditMeal = useCallback(() => setEditMeal({ ...DEFAULT_MEAL }), []);
+  const resetEditMealToDefault = useCallback(() => setEditMeal({ ...DEFAULT_MEAL }), []);
 
-  const saveMealHandler = useCallback((meal) => {
+  const saveMealHandler = useCallback(
     R.pipe(
-      addOrUpdate(meal),
-      setMeals
-    )(meals);
+      MealsRepository.save,
+      setMeals,
+      resetEditMealToDefault
+    ), [resetEditMealToDefault]);
 
-    resetEditMeal();
-
-  }, [resetEditMeal, meals]);
-
-  const editMealHandler = useCallback((id) => {
+  const editMealHandler = useCallback(
     R.pipe(
-      findMeal(id),
+      MealsRepository.findMeal,
       setEditMeal
-    )(meals);
-  }, [meals]);
+    ), []);
 
-  const deleteMealHandler = useCallback((id) => {
+  const deleteMealHandler = useCallback(
     R.pipe(
-      R.remove(findMealIndex(id), 1),
+      MealsRepository.removeMeal,
       setMeals
-    )(meals);
-  }, [meals]);
-
-  const cancelMealEntryHandler = useCallback(() => {
-    resetEditMeal();
-  }, [resetEditMeal]);
+    ), []);
 
   return (
     <div className="container">
       <div className="row justify-content-center border-bottom">
-        <div className="col-2">
-          <h3 class="display-4">Meals</h3>
+        <div className="col-3">
+          <span className="display-4">Meals</span><small className="font-weight-light ml-2">v{process.env.REACT_APP_VERSION}</small>
         </div>
       </div>
       <div className="row p-3">
         <div className="col-sm-4">
-          <MealEntry onSaveMeal={saveMealHandler} onCancelMealEntry={cancelMealEntryHandler} meal={editMeal} />
+          <MealEntry onSaveMeal={saveMealHandler} onCancelMealEntry={() => resetEditMealToDefault()} meal={editMeal} />
         </div>
         <div className="col-sm-8">
           <MealList meals={meals} onEditMeal={editMealHandler} onDeleteMeal={deleteMealHandler} />
@@ -59,37 +56,11 @@ const CalorieCounter = ({ initialMeals, initialEditMeal }) => {
 };
 
 CalorieCounter.propTypes = {
-  initialMeals: PropTypes.array,
   initialEditMeal: MEAL_SHAPE
 };
 
 CalorieCounter.defaultProps = {
-  initialMeals: [],
   initialEditMeal: DEFAULT_MEAL
 };
-
-const addOrUpdate = R.curry((meal, ms) =>
-  R.ifElse(R.isNil,
-    () => addMeal(meal, ms),
-    () => updateMeal(meal, ms))
-    (meal.id));
-
-const addMeal = (meal, meals) =>
-  R.append({
-    ...meal,
-    id: randomInt(500)
-  }, meals);
-
-const updateMeal = (meal, meals) =>
-  R.adjust(
-    findMealIndex(meal.id)(meals),
-    R.always({ ...meal }),
-    meals);
-
-const byMealId = R.propEq('id');
-
-const findMeal = (id) => R.find(byMealId(id));
-
-const findMealIndex = (id) => R.findIndex(byMealId(id));
 
 export default CalorieCounter;

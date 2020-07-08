@@ -1,6 +1,8 @@
 import * as R from 'ramda';
 
-export const notEqual = R.curry((val, other) => R.not(R.equals(val, other)));
+export const equal = R.curry((val, other) => R.equals(val, other));
+
+export const notEqual = R.complement(equal);
 
 export const stringIsBlank = R.pipe(
   R.defaultTo(''),
