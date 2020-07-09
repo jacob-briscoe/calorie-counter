@@ -1,3 +1,42 @@
+# Overview
+This is just a small and simple application that helps you count calories. I initially created it based on an example application I was following in this training program: [Functional Programming for Beginners with JavaScript](https://www.knowthen.com/functional-programming-for-beginners-with-javascript), provided by [KnowThen](https://www.knowthen.com/) all credit goes to [James Moore](@knowthen) for the inspiration.
+
+<img src="/docs/assets/images/in-action.gif" />
+
+Try it out here: https://calorie-counter-6d948.web.app/
+
+# Design
+I was really interested in just learning how I could pair functional programming and [React](https://reactjs.org/). This was a good excuse to learn various techniques, some I liked and others not so much. One thing I really enjoyed to use in this application was the functional library: [Ramda](https://ramdajs.com/). Ramda was a joy to work with. The documentation is very well done, I especially enjoyed the [Thinking in Ramda](https://randycoulman.com/blog/categories/thinking-in-ramda/) series as it helped me apply some of the principles I was learning in James' course.
+
+## High Level
+
+<img src="/docs/assets/images/high-level-design.jpg" width="300" height="401" />
+
+## Components
+
+### Calorie Counter
+Besides the [App](src/App.js) component the [CalorieCounter](src/containers/CalorieCounter.js) component is the only one I would consider a container. It is a stateful functional component using hooks. The state it contains are the meals of course, and the meal the user would like to edit. This component contains the handlers for some of the actions a user can perform within the application:
+* Save Meal *add/update*
+* Delete Meal
+* Cancel Add or Edit Meal
+
+### MealEntry
+This component has three different *modes*: initial view, add, or edit. This component and the `FormEntry` both have state. The [MealEntry](src/components/Meal/MealEntry.js) component tracks whether or not to display the MealEntry form and FormEntry just tracks the inputs within the form itself. 
+
+Important thing about this component is how it handles editing meals. When a meal is passed to this component via a `meal` prop, it will switch to edit mode by prefilling the form and displaying itself. Within this component there are these children components:
+* `NoAction` *initial state, just displays a button Add Meal*
+* `FormEntry`
+
+### MealList
+This component isn't stateful, the meals provided to it are displayed. The edit and delete action handler references are passed to this component to be delegated. Within this component there are these children:
+* `ZeroMeals`
+* `ShowMealItems`
+
+## Look & Feel
+This app is using a very minimal amount of Bootstrap. It is responsive having breakpoints within the CalorieCounter component's layout and it uses CSS Grid layout.
+
+# Running
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

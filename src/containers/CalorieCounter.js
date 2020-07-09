@@ -39,15 +39,15 @@ const CalorieCounter = ({ initialEditMeal }) => {
   return (
     <div className="container">
       <div className="row justify-content-center border-bottom">
-        <div className="col-3">
+        <div>
           <span className="display-4">Meals</span><small className="font-weight-light ml-2">v{process.env.REACT_APP_VERSION}</small>
         </div>
       </div>
-      <div className="row p-3">
-        <div className="col-sm-4">
+      <div className="row justify-content-center mt-3">
+        <div className="col-sm-4 d-flex justify-content-center">
           <MealEntry onSaveMeal={saveMealHandler} onCancelMealEntry={() => resetEditMealToDefault()} meal={editMeal} />
         </div>
-        <div className="col-sm-8">
+        <div className="col-sm-8 justify-content-start">
           <MealList meals={meals} onEditMeal={editMealHandler} onDeleteMeal={deleteMealHandler} />
         </div>
       </div>

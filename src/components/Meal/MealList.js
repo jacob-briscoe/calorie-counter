@@ -21,17 +21,17 @@ MealList.defaultProps = {
 };
 
 const ZeroMeals = () => (
-  <h3>No meals yet, add one!</h3>
+  <div><h5>No meals yet, add one!</h5></div>
 );
 
 const ShowMealItems = (onEditMeal, onDeleteMeal, meals) => (
-  <div className="table-responsive">
+  <div className="table-responsive-sm">
     <table className="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Meal</th>
-          <th scope="col">Calories</th>
-          <th scope="col"></th>
+          <th scope="col" width="40%">Meal</th>
+          <th scope="col" width="30%">Calories</th>
+          <th scope="col" width="30%"></th>
         </tr>
       </thead>
       <tbody>

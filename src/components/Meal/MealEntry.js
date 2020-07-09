@@ -28,7 +28,7 @@ const MealEntry = ({ onSaveMeal, onCancelMealEntry, meal }) => {
 };
 
 const NoAction = ({ onAddMeal }) => (
-  <button onClick={onAddMeal} className="btn btn-primary">Add Meal</button>
+  <div><button onClick={onAddMeal} className="btn btn-primary">Add</button></div>
 );
 
 const FormEntry = ({ onSaveMeal, onCancelMeal, meal }) => {
@@ -53,7 +53,7 @@ const FormEntry = ({ onSaveMeal, onCancelMeal, meal }) => {
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <input type="text" className="form-control" id="description" aria-describedby="descriptionHelp" value={description} onChange={e => setDescription(e.target.value)} />
-          <small id="descriptionHelp" className="form-text text-muted">Describe the meal, snack, or whatever it may be.</small>
+          <small id="descriptionHelp" className="form-text text-muted">Describe the meal, snack, etc.</small>
         </div>
         <div className="form-group">
           <label htmlFor="calories">Calories</label>
