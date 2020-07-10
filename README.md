@@ -1,6 +1,6 @@
 # Overview
-This is just a small and simple application that helps you count calories. I initially created it based on an example application I was following in this training program: [Functional Programming for Beginners with JavaScript](https://www.knowthen.com/functional-programming-for-beginners-with-javascript), provided by [KnowThen](https://www.knowthen.com/) all credit goes to [James Moore](@knowthen) for the inspiration.
-
+This is just a small and simple application that helps you count calories. I initially created it based on an example application I was following in this training program: [Functional Programming for Beginners with JavaScript](https://www.knowthen.com/functional-programming-for-beginners-with-javascript), provided by [KnowThen](https://www.knowthen.com/) all credit goes to @knowthen for the inspiration.
+`
 <img src="/docs/assets/images/in-action.gif" />
 
 Try it out here: https://calorie-counter-6d948.web.app/
